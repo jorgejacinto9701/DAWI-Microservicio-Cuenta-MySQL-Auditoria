@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.prestamo.entity.Cuenta;
 import com.prestamo.service.CuentaService;
@@ -26,6 +27,9 @@ import com.prestamo.util.AppSettings;
 @RequestMapping("/url/cuenta")
 public class CuentaController {
 
+	@Autowired
+	private RestTemplate restTemplate;
+    
 	@Autowired
 	private CuentaService cuentaService;
 
@@ -39,14 +43,16 @@ public class CuentaController {
 
 	@GetMapping("/lista")
 	public List<Cuenta> lista() {
+		restTemplate.postForObject("http://localhost:8091/url/auditoria/registrar?tipoBaseDatos=MYSQL&baseDeDatos=Sistema_Biblioteca&tabla=cuenta", null, String.class);
 		List<Cuenta> lstSalida = cuentaService.listaCuenta();
 		return lstSalida;
 	}
 
 	@GetMapping("/consultaCuentaCompleja")
-	public List<Cuenta> consulta(@RequestParam("numero") String numero,
-			@RequestParam("entidadFinanciera") int entidadFinanciera, @RequestParam("tipoMoneda") int tipoMoneda,
-			@RequestParam("estado") int estado) {
+	public List<Cuenta> consulta(@RequestParam String numero,
+			@RequestParam int entidadFinanciera, 
+			@RequestParam int tipoMoneda,
+			@RequestParam int estado) {
 		List<Cuenta> lstSalida = cuentaService.listaCuentaConsultaCompleja("%" + numero + "%", entidadFinanciera,
 				tipoMoneda, estado);
 		return lstSalida;
