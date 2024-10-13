@@ -43,7 +43,7 @@ public class CuentaController {
 
 	@GetMapping("/lista")
 	public List<Cuenta> lista() {
-		restTemplate.postForObject("http://localhost:8091/url/auditoria/registrar?tipoBaseDatos=MYSQL&baseDeDatos=Sistema_Biblioteca&tabla=cuenta", null, String.class);
+		restTemplate.postForObject("http://localhost:8091/url/auditoria/registra/MYSQL-sistemaPrestamo-Cuenta-lista", null, String.class);
 		List<Cuenta> lstSalida = cuentaService.listaCuenta();
 		return lstSalida;
 	}
